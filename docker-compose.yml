@@ -1,0 +1,79 @@
+version: "3"
+
+services:
+  api:
+
+    build: 
+      context: ./order-backend-rust
+      dockerfile: dev.Dockerfile
+    volumes:
+      - ./order-backend-rust:/usr/src/myapp
+      - /usr/src/myapp/target
+    command: cargo watch --poll -x 'run -- --RUST_BACKTRACE=1'
+    depends_on: 
+      - db
+      - ws
+    restart: always
+    links: 
+      - db
+      - ws
+    ports: 
+      - 3000:3000
+  ws: 
+    build: 
+      context: ./order-backend-websocket
+      dockerfile: dev.Dockerfile
+    volumes:
+      - ./order-backend-websocket:/usr/src/myapp
+      - /usr/src/myapp/target
+    command: cargo watch --poll -x run
+    depends_on: 
+      - db
+    restart: always
+    links: 
+      - db
+    ports: 
+      - 3001:3001
+  user: 
+    build: 
+      context: ./order-frontend-user
+      dockerfile: Dockerfile
+    volumes:
+      - ./order-frontend-user:/usr/src/app
+      - /usr/src/app/node_modules
+    command: "npm run dev"
+    restart: always
+    ports: 
+      - 3333:3333 
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+  ceo: 
+    build: 
+      context: ./order-frontend-ceo
+      dockerfile: Dockerfile
+    volumes:
+      - ./order-frontend-ceo:/usr/src/app
+      - /usr/src/app/node_modules
+    command: "npm run dev"
+    restart: always
+    ports: 
+      - 3334:3334      
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+  db:
+    image: postgres:11
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: dlacjfrb
+      POSTGRES_USER: dlacjfrb
+      POSTGRES_DB: dev
+    ports:
+      - 5432:5432
+ 
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 9090:8080
+
+

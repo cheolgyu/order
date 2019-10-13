@@ -1,0 +1,16 @@
+
+docker-machine ssh default
+/var/lib/boot2docker/profile
+DOCKER_OPTS=--insecure-registry=localhost:5000
+
+
+docker-machine restart
+
+docker tag order-rust:latest localhost:5000/order-rust:latest
+docker push localhost:5000/order-rust:latest
+
+docker ps
+
+docker-machine ls 
+192.168.99.100
+docker-machine env
