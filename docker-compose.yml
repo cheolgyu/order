@@ -1,8 +1,27 @@
 version: "3"
-
+# openssl req -new -newkey rsa:2048 -nodes -keyout ssl.key -out ssl.csr   
 services:
-  api:
+  nginx:
+    container_name: proxy
+    volumes:
+      - ./proxy/conf/:/etc/nginx/conf.d/
+    image: proxy
+    ports:
+    - "443:443"
+    - "3000:3000"
+    - "3001:3001"
+    - "3333:3333"
+    - "3334:3334"
+    - "9090:8080"
+    depends_on: 
+        - api
+        - db
+        - user
+        - ceo
+        - adminer
+      
 
+  api:
     build: 
       context: ./order-backend-rust
       dockerfile: dev.Dockerfile
@@ -17,8 +36,7 @@ services:
     links: 
       - db
       - ws
-    ports: 
-      - 3000:3000
+    
   ws: 
     build: 
       context: ./order-backend-websocket
@@ -32,8 +50,7 @@ services:
     restart: always
     links: 
       - db
-    ports: 
-      - 3001:3001
+    
   user: 
     build: 
       context: ./order-frontend-user
@@ -43,8 +60,7 @@ services:
       - /usr/src/app/node_modules
     command: "npm run dev"
     restart: always
-    ports: 
-      - 3333:3333 
+   
     environment:
       - CHOKIDAR_USEPOLLING=true
   ceo: 
@@ -56,8 +72,7 @@ services:
       - /usr/src/app/node_modules
     command: "npm run dev"
     restart: always
-    ports: 
-      - 3334:3334      
+   
     environment:
       - CHOKIDAR_USEPOLLING=true
   db:
@@ -73,7 +88,6 @@ services:
   adminer:
     image: adminer
     restart: always
-    ports:
-      - 9090:8080
+   
 
 
