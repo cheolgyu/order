@@ -1,0 +1,10 @@
+오류:An SSL certificate error occurred when fetching the script.
+https://medium.com/@Carmichaelize/enabling-the-microphone-camera-in-chrome-for-local-unsecure-origins-9c90c3149339
+chrome://flags/#unsafely-treat-insecure-origin-as-secure
+chrome://flags/#allow-insecure-localhost
+https://www.chromium.org/blink/serviceworker/service-worker-faq
+chrome://inspect/#service-workers
+"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe" --user-data-dir=C:\ChromeTempFiles --unsafely-treat-insecure-origin-as-secure=https://localhost --allow-running-insecure-content --reduce-security-for-testing
+--user-data-dir=C:\ChromeTempFiles --unsafely-treat-insecure-origin-as-secure=https://localhost --allow-running-insecure-content --reduce-security-for-testing
+"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe" --user-data-dir=C:\ChromeTempFiles --unsafely-treat-insecure-origin-as-secure=http://localhost --allow-running-insecure-content --reduce-security-for-testing
+"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe" --user-data-dir=C:\ChromeTempFiles --unsafely-treat-insecure-origin-as-secure=http://localhost:3333 --allow-running-insecure-content --reduce-security-for-testing
