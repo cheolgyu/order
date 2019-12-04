@@ -1,12 +1,22 @@
 
-docker-machine ssh default
-/var/lib/boot2docker/profile
-DOCKER_OPTS=--insecure-registry=localhost:5000
+docker-machine create --driver virtualbox  --engine-insecure-registry localhost:5000 default
 
+
+docker-machine ssh default
+sudo vi /var/lib/boot2docker/profile
+DOCKER_OPTS=--insecure-registry=localhost:5000
+EXTRA_ARGS="
+--insecure-registry localhost:5000
+--insecure-registry 127.0.0.1:5000
+--insecure-registry myserver.pathTo.registry3:5000
+"
+
+sudo /etc/init.d/docker restart
 
 docker-machine restart
 
 docker tag order-rust:latest localhost:5000/order-rust:latest
+docker run -d -p 5000:5000 --restart=always --name registry registry:2
 docker push localhost:5000/order-rust:latest
 
 docker ps
